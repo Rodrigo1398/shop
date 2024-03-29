@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-import Image from 'next/image';
+// import Image from 'next/image';
 
 import { useCartStore } from '@/store';
 import { ProductImage, QuantitySelector } from '@/components';
@@ -20,7 +20,7 @@ export const ProductsInCart = () => {
 
   useEffect(() => {
     setLoaded(true) ;
-  });
+  },[setLoaded]);
 
 
 
