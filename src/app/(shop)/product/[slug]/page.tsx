@@ -24,25 +24,31 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+
   const slug = params.slug;
+
   const product = await getProductBySlug(slug);
+
   if (!product) {
     notFound();
   }
+
   return {
     title: product.title,
     description: product.description,
     openGraph: {
       title: product.title,
       description: product.description,
-      images: [`/products/${ product.images[1] }`],
+      images: [`https://shop-iota-wheat.vercel.app/products/${ product.images[1] }`],
     },
   };
 }
 
 export default async function ProductBySlugPage({ params }: Props) {
   const { slug } = params;
+
   const product = await getProductBySlug(slug);
+  
   console.log(product);
 
   if (!product) {
