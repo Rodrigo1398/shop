@@ -39,7 +39,7 @@ export async function generateMetadata(
     openGraph: {
       title: product.title,
       description: product.description,
-      images: [`https://shop-iota-wheat.vercel.app/products/${ product.images[1] }`],
+      images: [`https://jrac.vercel.app/products/${ product.images[1] }`],
     },
   };
 }
