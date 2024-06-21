@@ -7,6 +7,8 @@ import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/actions";
 import { IoInformationOutline } from "react-icons/io5";
 import clsx from 'clsx';
+import { signIn } from '@/auth.config';
+
 // import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
@@ -14,8 +16,6 @@ export const LoginForm = () => {
 
   // const router = useRouter();
   const [state, dispatch] = useFormState(authenticate, undefined);
-  
-  console.log(state);
 
   useEffect(() => {
     if ( state === 'Success' ) {
@@ -63,6 +63,9 @@ export const LoginForm = () => {
       {/* <button type="submit" className="btn-primary">
         Ingresar
       </button> */}
+      <button type='submit' onClick={()=>signIn('google')}>
+        Google
+      </button>
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">

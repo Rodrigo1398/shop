@@ -18,7 +18,7 @@ export const PlaceOrder = () => {
 
 
   const address = useAddressStore((state) => state.address);
-
+  
   const { itemsInCart, subTotal, tax, total } = useCartStore((state) =>
     state.getSummaryInformation()
   );
@@ -38,6 +38,7 @@ export const PlaceOrder = () => {
       productId: product.id,
       quantity: product.quantity,
       size: product.size,
+      color: product.color
     }))
 
 

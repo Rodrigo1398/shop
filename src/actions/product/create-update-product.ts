@@ -2,11 +2,13 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { Gender, Product, Size } from '@prisma/client';
+import { Gender, Product, Size, Color, Category } from '@prisma/client';
 import { z } from 'zod';
 import {v2 as cloudinary} from 'cloudinary';
-cloudinary.config( process.env.CLOUDINARY_URL ?? '' );
 
+
+
+cloudinary.config( process.env.CLOUDINARY_URL ?? '' );
 
 
 const productSchema = z.object({
@@ -22,15 +24,12 @@ const productSchema = z.object({
     .number()
     .min(0)
     .transform( val => Number(val.toFixed(0)) ),
-  categoryId: z.string().uuid(),
+  category: z.nativeEnum(Category),
   sizes: z.coerce.string().transform( val => val.split(',') ),
+  colors: z.coerce.string().transform( val => val.split(',') ),
   tags: z.string(),
   gender: z.nativeEnum(Gender), 
 });
-
-
-
-
 
 
 
@@ -65,6 +64,9 @@ export const createUpdateProduct = async( formData: FormData ) => {
             sizes: {
               set: rest.sizes as Size[],
             },
+            colors: {
+              set: rest.colors as Color[],
+            },
             tags: {
               set: tagsArray
             }
@@ -78,6 +80,9 @@ export const createUpdateProduct = async( formData: FormData ) => {
             ...rest,
             sizes: {
               set: rest.sizes as Size[],
+            },
+            colors: {
+              set: rest.colors as Color[],
             },
             tags: {
               set: tagsArray
@@ -148,7 +153,7 @@ const uploadImages = async( images: File[] ) => {
         const buffer = await image.arrayBuffer();
         const base64Image = Buffer.from(buffer).toString('base64');
   
-        return cloudinary.uploader.upload(`data:image/png;base64,${ base64Image }`)
+        return cloudinary.uploader.upload(`data:image/png;base64,${ base64Image }`,{folder:'sauvageBolivia'})
           .then( r => r.secure_url );
         
       } catch (error) {

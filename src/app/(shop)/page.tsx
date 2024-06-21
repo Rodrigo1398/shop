@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { getPaginatedProductsWithImages } from '@/actions';
 import { Pagination, ProductGrid, Title } from '@/components';
+import BotonInstalarPWA from '@/components/PWA/Descargar';
 
 
 
@@ -22,13 +23,9 @@ export default async function Home({ searchParams }: Props) {
   const { products, currentPage, totalPages } = await getPaginatedProductsWithImages({ page });
 
 
-  if ( products.length === 0 ) {
-    redirect('/');
-  }
-
-
   return (
     <>
+    {/* <BotonInstalarPWA/> */}
       <Title
         title="Tienda"
         subtitle="Todos los productos"

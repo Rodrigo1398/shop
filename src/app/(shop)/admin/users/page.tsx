@@ -22,6 +22,7 @@ export default async function OrdersPage() {
       <Title title="Mantenimiento de usuarios" />
 
       <div className="mb-10">
+        
         <UsersTable users={ users } />
 
         <Pagination totalPages={ 1 } />

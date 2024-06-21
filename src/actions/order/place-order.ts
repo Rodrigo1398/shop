@@ -2,12 +2,13 @@
 import prisma from "@/lib/prisma";
 
 import { auth } from "@/auth.config";
-import type { Address, Size } from "@/interfaces";
+import type { Address, Color, Size } from "@/interfaces";
 
 interface ProductToOrder {
   productId: string;
   quantity: number;
   size: Size;
+  color:Color;
 }
 
 export const placeOrder = async (
@@ -91,7 +92,6 @@ export const placeOrder = async (
           throw new Error(`${product.title} no tiene inventario suficiente`);
         }
       });
-
       // 2. Crear la orden - Encabezado - Detalles
       const order = await tx.order.create({
         data: {
@@ -106,6 +106,7 @@ export const placeOrder = async (
               data: productIds.map((p) => ({
                 quantity: p.quantity,
                 size: p.size,
+                color: p.color,
                 productId: p.productId,
                 price:
                   products.find((product) => product.id === p.productId)
@@ -117,10 +118,10 @@ export const placeOrder = async (
       });
 
       // Validar, si el price es cero, entonces, lanzar un error
-
+      console.log(address)
       // 3. Crear la direccion de la orden
       // Address
-      const { country, ...restAddress } = address;
+      const { country,...restAddress } = address;
       const orderAddress = await tx.orderAddress.create({
         data: {
           ...restAddress,

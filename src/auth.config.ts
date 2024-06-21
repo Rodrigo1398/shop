@@ -1,5 +1,6 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from "next-auth/providers/google";
 import bcryptjs from 'bcryptjs';
 import { z } from 'zod';
 
@@ -16,7 +17,6 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
 
     authorized({ auth, request: { nextUrl } }) {
-      console.log({ auth });
       // const isLoggedIn = !!auth?.user;
 
       // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
@@ -49,7 +49,10 @@ export const authConfig: NextAuthConfig = {
 
 
   providers: [
-
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
     Credentials({
       async authorize(credentials) {
 
@@ -77,8 +80,6 @@ export const authConfig: NextAuthConfig = {
           return rest;
       },
     }),
-
-
   ]
 }
 

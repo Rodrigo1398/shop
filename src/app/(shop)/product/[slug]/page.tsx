@@ -7,9 +7,6 @@ import { titleFont } from "@/config/fonts";
 import {
   ProductMobileSlideshow,
   ProductSlideshow,
-  QuantitySelector,
-  SizeSelector,
-  StockLabel,
 } from "@/components";
 import { getProductBySlug } from "@/actions";
 import { AddToCart } from './ui/AddToCart';
@@ -48,8 +45,6 @@ export default async function ProductBySlugPage({ params }: Props) {
   const { slug } = params;
 
   const product = await getProductBySlug(slug);
-  
-  console.log(product);
 
   if (!product) {
     notFound();
@@ -76,15 +71,15 @@ export default async function ProductBySlugPage({ params }: Props) {
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
-        <StockLabel slug={product.slug} />
+        {/* <StockLabel slug={product.slug} /> */}
 
         <h1 className={` ${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
 
-        <p className="text-lg mb-5">${product.price}</p>
+        <p className="text-lg mb-5">Bs.{product.price}</p>
 
-        <AddToCart product={ product } />
+        <AddToCart product={ product }/>
 
         {/* Descripción */}
         <h3 className="font-bold text-sm">Descripción</h3>

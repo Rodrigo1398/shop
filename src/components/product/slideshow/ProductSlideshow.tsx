@@ -13,9 +13,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
 import './slideshow.css';
-import Image from 'next/image';
 import { ProductImage } from '../product-image/ProductImage';
-
 
 
 interface Props {
@@ -25,11 +23,10 @@ interface Props {
 }
 
 
-
 export const ProductSlideshow = ( { images, title, className }: Props ) => {
 
-  const [ thumbsSwiper, setThumbsSwiper ] = useState<SwiperObject>();
 
+  const [ thumbsSwiper, setThumbsSwiper ] = useState<SwiperObject>();
 
   return (
     <div className={ className }>
@@ -67,7 +64,6 @@ export const ProductSlideshow = ( { images, title, className }: Props ) => {
           ) )
         }
       </Swiper>
-
 
       <Swiper
         onSwiper={ setThumbsSwiper }

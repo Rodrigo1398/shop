@@ -2,26 +2,27 @@
 
 import { useState } from "react";
 
-import { QuantitySelector, SizeSelector } from "@/components";
-import type { CartProduct, Product, Size } from "@/interfaces";
-import { useCartStore } from '@/store';
+import { ColorSelector, QuantitySelector, SizeSelector } from "@/components";
+import type { CartProduct, Color, Product, Size } from "@/interfaces";
+import { useCartStore } from "@/store";
 
 interface Props {
   product: Product;
 }
 
 export const AddToCart = ({ product }: Props) => {
-
-  const addProductToCart = useCartStore( state => state.addProductTocart );
+  const addProductToCart = useCartStore((state) => state.addProductTocart);
 
   const [size, setSize] = useState<Size | undefined>();
+  const [color, setColor] = useState<Color | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
 
   const addToCart = () => {
+    
     setPosted(true);
 
-    if (!size) return;
+    if (!size || !color) return;
 
     const cartProduct: CartProduct = {
       id: product.id,
@@ -30,17 +31,16 @@ export const AddToCart = ({ product }: Props) => {
       price: product.price,
       quantity: quantity,
       size: size,
-      image: product.images[0]
-    }
+      color: color,
+      image: product.images[0],
+    };
 
     addProductToCart(cartProduct);
     setPosted(false);
     setQuantity(1);
     setSize(undefined);
-
-
+    setColor(undefined);
   };
-
 
   return (
     <>
@@ -55,6 +55,13 @@ export const AddToCart = ({ product }: Props) => {
         selectedSize={size}
         availableSizes={product.sizes}
         onSizeChanged={setSize}
+      />
+
+      {/* Selector de Colores */}
+      <ColorSelector
+        selectedColor={color}
+        availableColors={product.colors}
+        onColorChanged={setColor}
       />
 
       {/* Selector de Cantidad */}

@@ -1,19 +1,23 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Category, Product, ProductImage as ProductWithImage } from "@/interfaces";
-import Image from "next/image";
+import { Select, SelectItem } from "@nextui-org/react";
+import {
+  Product,
+  ProductImage as ProductWithImage,
+} from "@/interfaces";
 import clsx from "clsx";
 import { createUpdateProduct, deleteProductImage } from "@/actions";
-import { useRouter } from 'next/navigation';
-import { ProductImage } from '@/components';
+import { useRouter } from "next/navigation";
+import { ProductImage } from "@/components";
+import { Category, Gender } from "@prisma/client";
 
 interface Props {
   product: Partial<Product> & { ProductImage?: ProductWithImage[] };
-  categories: Category[];
 }
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const colors = ["Rojo", "Negro", "Gris", "Morado", "Amarillo", "Verde"];
 
 interface FormInputs {
   title: string;
@@ -22,15 +26,14 @@ interface FormInputs {
   price: number;
   inStock: number;
   sizes: string[];
+  colors: string[];
   tags: string;
-  gender: "men" | "women" | "kid" | "unisex";
-  categoryId: string;
-
+  gender: Gender;
+  category: Category;
   images?: FileList;
 }
 
-export const ProductForm = ({ product, categories }: Props) => {
-
+export const ProductForm = ({ product }: Props) => {
   const router = useRouter();
 
   const {
@@ -45,12 +48,13 @@ export const ProductForm = ({ product, categories }: Props) => {
       ...product,
       tags: product.tags?.join(", "),
       sizes: product.sizes ?? [],
-
+      colors: product.colors ?? [],
       images: undefined,
     },
   });
 
   watch("sizes");
+  watch("colors");
 
   const onSizeChanged = (size: string) => {
     const sizes = new Set(getValues("sizes"));
@@ -58,43 +62,46 @@ export const ProductForm = ({ product, categories }: Props) => {
     setValue("sizes", Array.from(sizes));
   };
 
+  const onColorChanged = (color: string) => {
+    const colors = new Set(getValues("colors"));
+    colors.has(color) ? colors.delete(color) : colors.add(color);
+    setValue("colors", Array.from(colors));
+  };
+
   const onSubmit = async (data: FormInputs) => {
     const formData = new FormData();
 
     const { images, ...productToSave } = data;
 
-    if ( product.id ){
+    if (product.id) {
       formData.append("id", product.id ?? "");
     }
-    
+
     formData.append("title", productToSave.title);
     formData.append("slug", productToSave.slug);
     formData.append("description", productToSave.description);
     formData.append("price", productToSave.price.toString());
     formData.append("inStock", productToSave.inStock.toString());
     formData.append("sizes", productToSave.sizes.toString());
+    formData.append("colors", productToSave.colors.toString());
     formData.append("tags", productToSave.tags);
-    formData.append("categoryId", productToSave.categoryId);
+    formData.append("categoryId", productToSave.category);
     formData.append("gender", productToSave.gender);
-    
-    if ( images ) {
-      for ( let i = 0; i < images.length; i++  ) {
-        formData.append('images', images[i]);
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append("images", images[i]);
       }
     }
 
+    const { ok, product: updatedProduct } = await createUpdateProduct(formData);
 
-
-    const { ok, product:updatedProduct } = await createUpdateProduct(formData);
-
-    if ( !ok ) {
-      alert('Producto no se pudo actualizar');
+    if (!ok) {
+      alert("Producto no se pudo actualizar");
       return;
     }
 
-    router.replace(`/admin/product/${ updatedProduct?.slug }`)
-
-
+    router.replace(`/admin/product/${updatedProduct?.slug}`);
   };
 
   return (
@@ -150,16 +157,15 @@ export const ProductForm = ({ product, categories }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Gender</span>
+          <span>Genero</span>
           <select
             className="p-2 border rounded-md bg-gray-200"
             {...register("gender", { required: true })}
           >
             <option value="">[Seleccione]</option>
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="kid">Kid</option>
-            <option value="unisex">Unisex</option>
+            <option value="hombre">Hombre</option>
+            <option value="mujer">Mujer</option>
+            <option value="sex_shop">Shex Shop</option>
           </select>
         </div>
 
@@ -167,14 +173,24 @@ export const ProductForm = ({ product, categories }: Props) => {
           <span>Categoria</span>
           <select
             className="p-2 border rounded-md bg-gray-200"
-            {...register("categoryId", { required: true })}
+            {...register("category", { required: true })}
           >
             <option value="">[Seleccione]</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
+            <option value="men">Boxers</option>
+            <option value="Soutiens">Soutiens</option>
+            <option value="Bodys">Bodys</option>
+            <option value="Corseteria">Corseteria</option>
+            <option value="Bombachas">Bombachas</option>
+            <option value="Portaligas">Portaligas</option>
+            <option value="Bikinis_Swinwearisex">Bikinis Swinwear</option>
+            <option value="Pijamas_Homewear">Pijamas Homewear</option>
+            <option value="Accesorios">Accesorios</option>
+            <option value="Para_ellos">Para ellos</option>
+            <option value="Para_ellas">Para ellas</option>
+            <option value="Pugs">Pugs</option>
+            <option value="Disfraces">Disfraces</option>
+            <option value="Lubricantes">Lubricantes</option>
+            <option value="Juegos">Juegos</option>
           </select>
         </div>
 
@@ -213,11 +229,32 @@ export const ProductForm = ({ product, categories }: Props) => {
             ))}
           </div>
 
+          <div className="flex flex-col">
+            <span>Colores</span>
+            <Select
+              label="Seleccion"
+              selectionMode="multiple"
+              placeholder="No seleccionado"
+              selectedKeys={getValues("colors")}
+              // onSelectionChange={setValues}
+            >
+              {colors.map((color) => (
+                <SelectItem
+                  key={color}
+                  value={color}
+                  onClick={() => onColorChanged(color)}
+                >
+                  {color}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+
           <div className="flex flex-col mb-2">
             <span>Fotos</span>
             <input
               type="file"
-              { ...register('images') }
+              {...register("images")}
               multiple
               className="p-2 border rounded-md bg-gray-200"
               accept="image/png, image/jpeg, image/avif"
@@ -229,7 +266,7 @@ export const ProductForm = ({ product, categories }: Props) => {
               <div key={image.id}>
                 <ProductImage
                   alt={product.title ?? ""}
-                  src={ image.url }
+                  src={image.url}
                   width={300}
                   height={300}
                   className="rounded-t shadow-md"

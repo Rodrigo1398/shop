@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getOrderById } from "@/actions/order/get-order-by-id";
 import { currencyFormat } from "@/utils";
 import { OrderStatus, PayPalButton, Title } from "@/components";
+import Link from "next/link";
 
 interface Props {
   params: {
@@ -55,7 +56,7 @@ export default async function OrdersByIdPage({ params }: Props) {
                 <div>
                   <p>{item.product.title}</p>
                   <p>
-                    ${item.price} x {item.quantity}
+                    Bs.{item.price} x {item.quantity}
                   </p>
                   <p className="font-bold">
                     Subtotal: {currencyFormat(item.price * item.quantity)}
@@ -109,12 +110,21 @@ export default async function OrdersByIdPage({ params }: Props) {
             </div>
 
             <div className="mt-5 mb-2 w-full">
+              <Link
+                href={`https://wa.me/74542714?text=Orden %23 ${id.split("-").at(-1)}`}
+                target="_blank"
+                className="w-full block text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
+              >
+                Whatsapp
+              </Link>
+            </div>
+            {/* <div className="mt-5 mb-2 w-full">
               {order?.isPaid ? (
                 <OrderStatus isPaid={order?.isPaid ?? false} />
               ) : (
                 <PayPalButton amount={order!.total} orderId={order!.id} />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

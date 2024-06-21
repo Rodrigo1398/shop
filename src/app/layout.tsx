@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     default: "Home - Teslo | Shop",
   },
   description: "Una tienda virtual de productos",
+  manifest:"/manifest.json"
 };
 
 export default function RootLayout({

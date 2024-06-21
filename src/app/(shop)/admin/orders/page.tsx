@@ -1,12 +1,11 @@
 export const revalidate = 0;
 
-// https://tailwindcomponents.com/component/hoverable-table
-import {  getPaginatedOrders } from "@/actions";
+import { getPaginatedOrders } from "@/actions";
 import { Pagination, Title } from "@/components";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { IoCardOutline } from "react-icons/io5";
+import { ChangePayment } from "./ui/ChangePayment";
 
 export default async function OrdersPage() {
 
@@ -65,29 +64,28 @@ export default async function OrdersPage() {
                 <td className="flex items-center text-sm  text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                   {order.isPaid ? (
                     <>
-                      <IoCardOutline className="text-green-800" />
-                      <span className="mx-2 text-green-800">Pagada</span>
+                      <ChangePayment id={order.id} isPaid={order.isPaid} />
                     </>
                   ) : (
                     <>
-                      <IoCardOutline className="text-red-800" />
-                      <span className="mx-2 text-red-800">No Pagada</span>
+                      <ChangePayment id={order.id} isPaid={order.isPaid} />
                     </>
                   )}
                 </td>
                 <td className="text-sm text-gray-900 font-light px-6 ">
-                  <Link href={`/orders/${ order.id }`} className="hover:underline">
+                  <Link
+                    href={`/orders/${order.id}`}
+                    className="hover:underline"
+                  >
                     Ver orden
                   </Link>
                 </td>
               </tr>
             ))}
-
-            
           </tbody>
         </table>
 
-        <Pagination totalPages={ 1 } />
+        <Pagination totalPages={1} />
       </div>
     </>
   );

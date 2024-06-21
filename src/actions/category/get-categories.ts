@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 
 
-
 export const getCategories =  async()=> {
 
   try {
@@ -13,10 +12,7 @@ export const getCategories =  async()=> {
         }
       });
 
-
       return categories;
-
-
 
   } catch (error) {
     console.log(error);

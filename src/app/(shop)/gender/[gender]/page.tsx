@@ -21,7 +21,7 @@ interface Props {
 export default async function GenderByPage({ params, searchParams }: Props) {
 
   const { gender } = params;
-
+  
   const page = searchParams.page ? parseInt( searchParams.page ) : 1;
 
   const { products, currentPage, totalPages } = await getPaginatedProductsWithImages({ 
@@ -36,16 +36,10 @@ export default async function GenderByPage({ params, searchParams }: Props) {
   
 
   const labels: Record<string, string>  = {
-    'men': 'para hombres',
-    'women': 'para mujeres',
-    'kid': 'para niños',
-    'unisex': 'para todos'
+    'hombre': 'para hombres',
+    'mujer': 'para mujeres',
+    'sex_shop': 'sex shop',
   }
-
-  // if ( id === 'kids' ) {
-  //   notFound();
-  // }
-
 
   return (
     <>

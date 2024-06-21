@@ -49,10 +49,10 @@ export const ProductsInCart = () => {
             <Link 
               className="hover:underline cursor-pointer"
               href={ `/product/${ product.slug } ` }>
-              { product.size } - {product.title}
+              { product.size } - {product.color} - {product.title}
             </Link>
             
-            <p>${product.price}</p>
+            <p>Bs.{product.price}</p>
             <QuantitySelector 
               quantity={ product.quantity } 
               onQuantityChanged={ quantity => updateProductQuantity(product, quantity) }

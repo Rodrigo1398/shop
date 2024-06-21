@@ -11,6 +11,9 @@ export * from './auth/logout';
 export * from './auth/register';
 
 export * from './category/get-categories';
+export * from './category/category-pagination';
+export * from './category/create-update-category';
+export * from './category/get-category-by-name';
 
 export * from './country/get-countries';
 
@@ -18,6 +21,7 @@ export * from './order/place-order';
 export * from './order/get-order-by-id';
 export * from './order/get-paginated-orders';
 export * from './order/get-orders-by-user';
+export * from './order/change-payment-status';
 
 export * from './payments/set-transaction-id';
 export * from './payments/paypal-check-payment';

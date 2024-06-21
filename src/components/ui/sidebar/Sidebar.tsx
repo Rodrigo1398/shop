@@ -29,21 +29,21 @@ export const Sidebar = () => {
     <div>
       {/* Background black */}
       {isSideMenuOpen && (
-        <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" />
+        <div className="fixed top-0 left-0 hidden md:block w-screen h-screen z-10 bg-black opacity-30" />
       )}
 
       {/* Blur */}
       {isSideMenuOpen && (
         <div
           onClick={closeMenu}
-          className="fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-filter backdrop-blur-sm"
+          className="fade-in fixed top-0 left-0 hidden md:block w-screen h-screen z-10 backdrop-filter backdrop-blur-sm"
         />
       )}
 
       {/* Sidemenu */}
       <nav
         className={clsx(
-          "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
+          "fixed p-5 right-0 top-0 w-screen md:w-[500px] h-screen bg-white z-40 shadow-2xl transform transition-all duration-300",
           {
             "translate-x-full": !isSideMenuOpen,
           }

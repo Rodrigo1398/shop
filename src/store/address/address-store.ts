@@ -32,6 +32,7 @@ export const useAddressStore = create<State>()(
       },
 
       setAddress: (address) => {
+        console.log(address)
         set({ address });
       },
     }),
